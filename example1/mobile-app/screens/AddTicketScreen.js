@@ -6,7 +6,9 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
-    ActivityIndicator
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform
 } from 'react-native';
 import { ApiService } from '../services/ApiService';
 import { validateDate, validateAmount, validateTextField } from '../utils/validation';
@@ -109,98 +111,107 @@ export default function AddTicketScreen({ navigation }) {
     };
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.form}>
-                <Text style={styles.title}>Add New Ticket</Text>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={100}
+        >
+            <ScrollView
+                style={styles.container}
+                keyboardShouldPersistTaps="handled"
+            >
+                <View style={styles.form}>
+                    <Text style={styles.title}>Add New Ticket</Text>
 
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Date *</Text>
-                    <View style={styles.dateInputContainer}>
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Date *</Text>
+                        <View style={styles.dateInputContainer}>
+                            <TextInput
+                                style={[styles.input, styles.dateInput]}
+                                placeholder="YYYY-MM-DD"
+                                value={formData.date}
+                                onChangeText={(value) => handleInputChange('date', value)}
+                                editable={!loading}
+                            />
+                            <TouchableOpacity
+                                style={styles.todayButton}
+                                onPress={setToday}
+                                disabled={loading}
+                            >
+                                <Text style={styles.todayButtonText}>Today</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Amount ($) *</Text>
                         <TextInput
-                            style={[styles.input, styles.dateInput]}
-                            placeholder="YYYY-MM-DD"
-                            value={formData.date}
-                            onChangeText={(value) => handleInputChange('date', value)}
+                            style={styles.input}
+                            placeholder="0.00"
+                            keyboardType="decimal-pad"
+                            value={formData.amount}
+                            onChangeText={(value) => handleInputChange('amount', value)}
                             editable={!loading}
                         />
-                        <TouchableOpacity
-                            style={styles.todayButton}
-                            onPress={setToday}
-                            disabled={loading}
-                        >
-                            <Text style={styles.todayButtonText}>Today</Text>
-                        </TouchableOpacity>
                     </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Type *</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="e.g., ticket, snacks, subscription"
+                            value={formData.type}
+                            onChangeText={(value) => handleInputChange('type', value)}
+                            editable={!loading}
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Category *</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="e.g., action, drama, sci-fi"
+                            value={formData.category}
+                            onChangeText={(value) => handleInputChange('category', value)}
+                            editable={!loading}
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Description *</Text>
+                        <TextInput
+                            style={[styles.input, styles.textArea]}
+                            placeholder="Movie title or description"
+                            value={formData.description}
+                            onChangeText={(value) => handleInputChange('description', value)}
+                            multiline
+                            numberOfLines={3}
+                            editable={!loading}
+                        />
+                    </View>
+
+                    <TouchableOpacity
+                        style={[styles.submitButton, loading && styles.disabledButton]}
+                        onPress={handleSubmit}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <ActivityIndicator color="#fff" />
+                        ) : (
+                            <Text style={styles.submitButtonText}>Create Ticket</Text>
+                        )}
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.cancelButton}
+                        onPress={() => navigation.goBack()}
+                        disabled={loading}
+                    >
+                        <Text style={styles.cancelButtonText}>Cancel</Text>
+                    </TouchableOpacity>
                 </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Amount ($) *</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="0.00"
-                        keyboardType="decimal-pad"
-                        value={formData.amount}
-                        onChangeText={(value) => handleInputChange('amount', value)}
-                        editable={!loading}
-                    />
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Type *</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="e.g., ticket, snacks, subscription"
-                        value={formData.type}
-                        onChangeText={(value) => handleInputChange('type', value)}
-                        editable={!loading}
-                    />
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Category *</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="e.g., action, drama, sci-fi"
-                        value={formData.category}
-                        onChangeText={(value) => handleInputChange('category', value)}
-                        editable={!loading}
-                    />
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Description *</Text>
-                    <TextInput
-                        style={[styles.input, styles.textArea]}
-                        placeholder="Movie title or description"
-                        value={formData.description}
-                        onChangeText={(value) => handleInputChange('description', value)}
-                        multiline
-                        numberOfLines={3}
-                        editable={!loading}
-                    />
-                </View>
-
-                <TouchableOpacity
-                    style={[styles.submitButton, loading && styles.disabledButton]}
-                    onPress={handleSubmit}
-                    disabled={loading}
-                >
-                    {loading ? (
-                        <ActivityIndicator color="#fff" />
-                    ) : (
-                        <Text style={styles.submitButtonText}>Create Ticket</Text>
-                    )}
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.cancelButton}
-                    onPress={() => navigation.goBack()}
-                    disabled={loading}
-                >
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 }
 
