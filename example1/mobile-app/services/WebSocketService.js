@@ -8,9 +8,15 @@ class WebSocketService {
         this.maxReconnectAttempts = 5;
         this.baseReconnectDelay = 2000;
         this.isIntentionalClose = false;
+        this.isOffline = false;
     }
 
     connect() {
+        if (this.isOffline) {
+            console.log('WebSocket: Skipping connection attempt (offline)');
+            return;
+        }
+
         try {
             console.log('WebSocket: Attempting to connect to', WS_URL);
             this.isIntentionalClose = false;
@@ -59,6 +65,11 @@ class WebSocketService {
             return;
         }
 
+        if (this.isOffline) {
+            console.log('WebSocket: Offline, skipping reconnection');
+            return;
+        }
+
         if (this.reconnectAttempts < this.maxReconnectAttempts) {
             this.reconnectAttempts++;
             // Exponential backoff: 2s, 4s, 8s, 16s, 32s
@@ -100,6 +111,18 @@ class WebSocketService {
             console.log('WebSocket: Message sent', message);
         } else {
             console.warn('WebSocket: Cannot send message, connection not open');
+        }
+    }
+
+    setOffline(offline) {
+        this.isOffline = offline;
+        if (offline) {
+            console.log('WebSocket: Going offline, disconnecting');
+            this.disconnect();
+        } else {
+            console.log('WebSocket: Back online, reconnecting');
+            this.reconnectAttempts = 0;
+            this.connect();
         }
     }
 }

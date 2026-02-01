@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -10,6 +10,7 @@ import {
     KeyboardAvoidingView,
     Platform
 } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import { ApiService } from '../services/ApiService';
 import { validateDate, validateAmount, validateTextField } from '../utils/validation';
 import { showToast } from '../utils/toast';
@@ -23,6 +24,14 @@ export default function AddTicketScreen({ navigation }) {
         description: ''
     });
     const [loading, setLoading] = useState(false);
+    const [isOnline, setIsOnline] = useState(true);
+
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(state => {
+            setIsOnline(state.isConnected && state.isInternetReachable !== false);
+        });
+        return () => unsubscribe();
+    }, []);
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({
@@ -94,11 +103,17 @@ export default function AddTicketScreen({ navigation }) {
                 showToast('✅ Ticket created successfully');
                 setTimeout(() => navigation.goBack(), 500);
             } else {
-                showToast(result.error || 'Failed to create ticket');
+                // Only show error if online (offline is expected behavior)
+                if (isOnline) {
+                    showToast(result.error || 'Failed to create ticket');
+                }
             }
         } catch (error) {
             console.error('Error creating ticket:', error);
-            showToast('An unexpected error occurred');
+            // Only show error if online
+            if (isOnline) {
+                showToast('An unexpected error occurred');
+            }
         } finally {
             setLoading(false);
         }

@@ -8,6 +8,7 @@ import {
     Alert,
     ScrollView
 } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import { ApiService } from '../services/ApiService';
 
 export default function TicketDetailsScreen({ route, navigation }) {
@@ -15,9 +16,15 @@ export default function TicketDetailsScreen({ route, navigation }) {
     const [ticket, setTicket] = useState(null);
     const [loading, setLoading] = useState(true);
     const [offline, setOffline] = useState(false);
+    const [isOnline, setIsOnline] = useState(true);
 
     useEffect(() => {
         loadTicketDetails();
+
+        const unsubscribe = NetInfo.addEventListener(state => {
+            setIsOnline(state.isConnected && state.isInternetReachable !== false);
+        });
+        return () => unsubscribe();
     }, [ticketId]);
 
     const loadTicketDetails = async () => {
@@ -66,12 +73,18 @@ export default function TicketDetailsScreen({ route, navigation }) {
                                 Alert.alert('Success', 'Ticket deleted successfully');
                                 navigation.goBack();
                             } else {
-                                Alert.alert('Error', result.error || 'Failed to delete ticket');
+                                // Only show error if online
+                                if (isOnline) {
+                                    Alert.alert('Error', result.error || 'Failed to delete ticket');
+                                }
                                 setLoading(false);
                             }
                         } catch (error) {
                             console.error('Error deleting ticket:', error);
-                            Alert.alert('Error', 'An unexpected error occurred');
+                            // Only show error if online
+                            if (isOnline) {
+                                Alert.alert('Error', 'An unexpected error occurred');
+                            }
                             setLoading(false);
                         }
                     }

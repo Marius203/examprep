@@ -121,6 +121,9 @@ export default function App() {
             const online = state.isConnected && state.isInternetReachable !== false;
             setIsOnline(online);
             console.log('Network status:', online ? 'Online' : 'Offline');
+            
+            // Update WebSocket service about network status
+            WebSocketService.setOffline(!online);
         });
 
         // Connect to WebSocket
