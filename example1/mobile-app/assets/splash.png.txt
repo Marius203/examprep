@@ -1,0 +1,4 @@
+# Movie Budget App - Placeholder Splash Screen
+
+This is a placeholder for the splash screen.
+For a production app, replace this with a 1284x2778 PNG image.

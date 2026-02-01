@@ -1,0 +1,4 @@
+# Movie Budget App - Placeholder Favicon
+
+This is a placeholder for the favicon.
+For a production app, replace this with a 48x48 PNG image.

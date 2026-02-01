@@ -1,0 +1,15 @@
+{
+  "name": "movie-budget-server",
+  "version": "1.0.0",
+  "description": "Movie entertainment budget tracking server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "tickets": [
+    {
+      "id": 1,
+      "date": "2026-01-15",
+      "amount": 15.99,
+      "type": "ticket",
+      "category": "action",
+      "description": "Avatar: The Way of Water"
+    },
+    {
+      "id": 2,
+      "date": "2026-01-20",
+      "amount": 8.5,
+      "type": "snacks",
+      "category": "action",
+      "description": "Popcorn and drinks for Avatar"
+    },
+    {
+      "id": 3,
+      "date": "2026-01-25",
+      "amount": 12.99,
+      "type": "subscription",
+      "category": "drama",
+      "description": "Monthly Netflix subscription"
+    },
+    {
+      "id": 4,
+      "date": "2026-01-28",
+      "amount": 14.5,
+      "type": "ticket",
+      "category": "sci-fi",
+      "description": "Dune: Part Two"
+    },
+    {
+      "id": 5,
+      "date": "2026-01-30",
+      "amount": 16,
+      "type": "ticket",
+      "category": "drama",
+      "description": "The Whale"
+    }
+  ],
+  "nextId": 7
+}

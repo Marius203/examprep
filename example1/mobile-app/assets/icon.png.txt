@@ -1,0 +1,4 @@
+# Movie Budget App - Placeholder Icon
+
+This is a placeholder for the app icon.
+For a production app, replace this with a 1024x1024 PNG image.

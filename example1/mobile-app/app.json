@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "movie-budget-app",
+    "slug": "movie-budget-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.moviebudgetapp"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+# Movie Budget App - Placeholder Adaptive Icon
+
+This is a placeholder for the Android adaptive icon.
+For a production app, replace this with a 1024x1024 PNG image.
